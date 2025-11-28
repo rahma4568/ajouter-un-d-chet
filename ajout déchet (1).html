@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>TadwirTech - Ajouter un déchet</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { margin: 5px; padding: 5px; }
+        button { padding: 5px 10px; }
+        ul { margin-top: 15px; }
+        .message { color: green; margin-top: 10px; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>TadwirTech - Ajouter un déchet</h1>
+
+    <label for="wasteName">Nom du déchet :</label>
+    <input type="text" id="wasteName" placeholder="Ex: Fanes de carottes"><br>
+
+    <label for="wasteQty">Quantité (kg) :</label>
+    <input type="number" id="wasteQty" placeholder="Ex: 5"><br>
+
+    <button onclick="addWaste()">Ajouter</button>
+
+    <p id="message" class="message"></p>
+
+    <h2>Liste des déchets :</h2>
+    <ul id="wasteList"></ul>
+
+    <script>
+        const wasteList = [];
+
+        function addWaste() {
+            const name = document.getElementById('wasteName').value.trim();
+            const qty = parseFloat(document.getElementById('wasteQty').value);
+            const messageEl = document.getElementById('message');
+
+            // Validation simple
+            if (!name) {
+                messageEl.textContent = "Le nom du déchet est obligatoire.";
+                messageEl.className = "error";
+                return;
+            }
+            if (isNaN(qty) || qty <= 0) {
+                messageEl.textContent = "La quantité doit être positive.";
+                messageEl.className = "error";
+                return;
+            }
+
+            // Ajouter à la liste
+            wasteList.push({name, qty});
+            updateList();
+
+            // Message de confirmation
+            messageEl.textContent = `Déchet "${name}" ajouté avec succès !`;
+            messageEl.className = "message";
+
+            // Réinitialiser les champs
+            document.getElementById('wasteName').value = '';
+            document.getElementById('wasteQty').value = '';
+        }
+
+        function updateList() {
+            const ul = document.getElementById('wasteList');
+            ul.innerHTML = '';
+            wasteList.forEach((waste, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${index + 1}. ${waste.name} - ${waste.qty} kg`;
+                ul.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
